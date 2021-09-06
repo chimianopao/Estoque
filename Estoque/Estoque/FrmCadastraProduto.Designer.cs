@@ -29,6 +29,8 @@ namespace Estoque {
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.maskedTextCodigo = new System.Windows.Forms.MaskedTextBox();
+            this.buttonCadastraFabricante = new System.Windows.Forms.Button();
             this.comboBoxFabricante = new System.Windows.Forms.ComboBox();
             this.numericQuantidade = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
@@ -45,8 +47,6 @@ namespace Estoque {
             this.label2 = new System.Windows.Forms.Label();
             this.textDescricao = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.buttonCadastraFabricante = new System.Windows.Forms.Button();
-            this.maskedTextCodigo = new System.Windows.Forms.MaskedTextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericQuantidade)).BeginInit();
             this.SuspendLayout();
@@ -77,6 +77,30 @@ namespace Estoque {
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             // 
+            // maskedTextCodigo
+            // 
+            this.maskedTextCodigo.AllowDrop = true;
+            this.maskedTextCodigo.Location = new System.Drawing.Point(89, 54);
+            this.maskedTextCodigo.Mask = "0000000000000";
+            this.maskedTextCodigo.Name = "maskedTextCodigo";
+            this.maskedTextCodigo.Size = new System.Drawing.Size(86, 20);
+            this.maskedTextCodigo.TabIndex = 0;
+            this.maskedTextCodigo.ValidatingType = typeof(int);
+            this.maskedTextCodigo.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextCodigo_MaskInputRejected);
+            this.maskedTextCodigo.Leave += new System.EventHandler(this.maskedTextCodigo_Leave);
+            this.maskedTextCodigo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
+
+            // 
+            // buttonCadastraFabricante
+            // 
+            this.buttonCadastraFabricante.Location = new System.Drawing.Point(216, 113);
+            this.buttonCadastraFabricante.Name = "buttonCadastraFabricante";
+            this.buttonCadastraFabricante.Size = new System.Drawing.Size(134, 23);
+            this.buttonCadastraFabricante.TabIndex = 25;
+            this.buttonCadastraFabricante.Text = "Cadastrar Fabricante";
+            this.buttonCadastraFabricante.UseVisualStyleBackColor = true;
+            this.buttonCadastraFabricante.Click += new System.EventHandler(this.buttonCadastraFabricante_Click);
+            // 
             // comboBoxFabricante
             // 
             this.comboBoxFabricante.FormattingEnabled = true;
@@ -85,7 +109,7 @@ namespace Estoque {
             this.comboBoxFabricante.Name = "comboBoxFabricante";
             this.comboBoxFabricante.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFabricante.Sorted = true;
-            this.comboBoxFabricante.TabIndex = 24;
+            this.comboBoxFabricante.TabIndex = 2;
             this.comboBoxFabricante.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // numericQuantidade
@@ -98,12 +122,13 @@ namespace Estoque {
             0});
             this.numericQuantidade.Name = "numericQuantidade";
             this.numericQuantidade.Size = new System.Drawing.Size(58, 20);
-            this.numericQuantidade.TabIndex = 23;
+            this.numericQuantidade.TabIndex = 3;
             this.numericQuantidade.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            this.numericQuantidade.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // label8
             // 
@@ -119,7 +144,7 @@ namespace Estoque {
             this.buttonLimpar.Location = new System.Drawing.Point(114, 293);
             this.buttonLimpar.Name = "buttonLimpar";
             this.buttonLimpar.Size = new System.Drawing.Size(75, 23);
-            this.buttonLimpar.TabIndex = 21;
+            this.buttonLimpar.TabIndex = 8;
             this.buttonLimpar.Text = "Limpar";
             this.buttonLimpar.UseVisualStyleBackColor = true;
             this.buttonLimpar.Click += new System.EventHandler(this.buttonLimpar_Click);
@@ -129,7 +154,7 @@ namespace Estoque {
             this.buttonGravar.Location = new System.Drawing.Point(24, 293);
             this.buttonGravar.Name = "buttonGravar";
             this.buttonGravar.Size = new System.Drawing.Size(75, 23);
-            this.buttonGravar.TabIndex = 20;
+            this.buttonGravar.TabIndex = 7;
             this.buttonGravar.Text = "Gravar";
             this.buttonGravar.UseVisualStyleBackColor = true;
             this.buttonGravar.Click += new System.EventHandler(this.buttonGravar_Click);
@@ -149,6 +174,7 @@ namespace Estoque {
             this.textMargemLucro.Name = "textMargemLucro";
             this.textMargemLucro.Size = new System.Drawing.Size(71, 20);
             this.textMargemLucro.TabIndex = 5;
+            this.textMargemLucro.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // label4
             // 
@@ -165,6 +191,7 @@ namespace Estoque {
             this.textPrecoVenda.Name = "textPrecoVenda";
             this.textPrecoVenda.Size = new System.Drawing.Size(71, 20);
             this.textPrecoVenda.TabIndex = 6;
+            this.textPrecoVenda.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // label5
             // 
@@ -181,6 +208,7 @@ namespace Estoque {
             this.textPrecoCusto.Name = "textPrecoCusto";
             this.textPrecoCusto.Size = new System.Drawing.Size(71, 20);
             this.textPrecoCusto.TabIndex = 4;
+            this.textPrecoCusto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // label6
             // 
@@ -217,6 +245,7 @@ namespace Estoque {
             this.textDescricao.Size = new System.Drawing.Size(346, 20);
             this.textDescricao.TabIndex = 1;
             this.textDescricao.TextChanged += new System.EventHandler(this.textDescricao_TextChanged);
+            this.textDescricao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // label1
             // 
@@ -226,27 +255,6 @@ namespace Estoque {
             this.label1.Size = new System.Drawing.Size(43, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "Código:";
-            // 
-            // buttonCadastraFabricante
-            // 
-            this.buttonCadastraFabricante.Location = new System.Drawing.Point(216, 113);
-            this.buttonCadastraFabricante.Name = "buttonCadastraFabricante";
-            this.buttonCadastraFabricante.Size = new System.Drawing.Size(134, 23);
-            this.buttonCadastraFabricante.TabIndex = 25;
-            this.buttonCadastraFabricante.Text = "Cadastrar Fabricante";
-            this.buttonCadastraFabricante.UseVisualStyleBackColor = true;
-            this.buttonCadastraFabricante.Click += new System.EventHandler(this.buttonCadastraFabricante_Click);
-            // 
-            // maskedTextCodigo
-            // 
-            this.maskedTextCodigo.Location = new System.Drawing.Point(89, 54);
-            this.maskedTextCodigo.Mask = "0000000000000";
-            this.maskedTextCodigo.Name = "maskedTextCodigo";
-            this.maskedTextCodigo.Size = new System.Drawing.Size(86, 20);
-            this.maskedTextCodigo.TabIndex = 26;
-            this.maskedTextCodigo.ValidatingType = typeof(int);
-            this.maskedTextCodigo.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextCodigo_MaskInputRejected);
-            this.maskedTextCodigo.Leave += new System.EventHandler(this.maskedTextCodigo_Leave);
             // 
             // FrmCadastraProduto
             // 

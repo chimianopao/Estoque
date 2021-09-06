@@ -19,8 +19,47 @@ namespace Estoque {
             CarregaFabricantes();
         }
 
+        private bool validaCampos()
+        {
+            if(textDescricao.Text == "")
+            {
+                MessageBox.Show("Descrição é um campo obrigatório.");
+                return false;
+            }
+            if (comboBoxFabricante.SelectedIndex == -1)
+            {
+                MessageBox.Show("Fabricante é um campo obrigatório.");
+                return false;
+            }
+            if (textPrecoVenda.Text == "")
+            {
+                MessageBox.Show("Preço de Venda é um campo obrigatório.");
+                return false;
+            }
+            return true;
+        }
+
+        private string getPrecoCusto()
+        {
+            if (textPrecoCusto.Text == "")
+                return "null";
+            else
+                return textPrecoCusto.Text;
+        }
+
+        private string getMargemLucro()
+        {
+            if (textMargemLucro.Text == "")
+                return "null";
+            else
+                return textMargemLucro.Text;
+        }
+
         private void buttonGravar_Click(object sender, EventArgs e)
         {
+            if (!validaCampos())
+                return;
+
             SqliteConnection connection;
             String strConn = @"Data Source=" + pathSQL;
             connection = new SqliteConnection(strConn);
@@ -34,11 +73,12 @@ namespace Estoque {
                     cmd.CommandText = $"INSERT INTO PRODUTOS (codigo, descricao, fabricanteId, quantidade, preco_custo, preco_venda, margem_lucro) " +
                         $"VALUES ({maskedTextCodigo.Text}, '{textDescricao.Text.ToUpper()}', " +
                         $"(select fab.fabricanteId from FABRICANTES fab WHERE fab.nome = '{comboBoxFabricante.Text}'), " +
-                        $"{numericQuantidade.Value}, {textPrecoCusto.Text}, {textPrecoVenda.Text}, {textMargemLucro.Text});";
+                        $"{numericQuantidade.Value}, {getPrecoCusto()}, {textPrecoVenda.Text}, {getMargemLucro()});";
 
                     cmd.ExecuteNonQuery();
                     cmd.Dispose();
                     MessageBox.Show("Produto cadastrado com sucesso.");
+                    LimpaCampos();
                 }
                 catch (Exception erro)
                 {
@@ -56,13 +96,14 @@ namespace Estoque {
                     cmd.CommandText = $"UPDATE PRODUTOS " +
                         $"SET descricao = '{textDescricao.Text}', " +
                         $"fabricanteId = (select fab.fabricanteId from FABRICANTES fab WHERE fab.nome = '{comboBoxFabricante.Text}'), " +
-                        $"quantidade = {numericQuantidade.Value}, preco_custo = {textPrecoCusto.Text}, " +
-                        $"preco_venda = {textPrecoVenda.Text}, margem_lucro = {textMargemLucro.Text} " +
+                        $"quantidade = {numericQuantidade.Value}, preco_custo = {getPrecoCusto()}, " +
+                        $"preco_venda = {textPrecoVenda.Text}, margem_lucro = {getMargemLucro()} " +
                         $"WHERE codigo = {maskedTextCodigo.Text}"; 
 
                     cmd.ExecuteNonQuery();
                     cmd.Dispose();
                     MessageBox.Show("Produto alterado com sucesso.");
+                    LimpaCampos();
                 }
                 catch (Exception erro)
                 {
@@ -70,8 +111,6 @@ namespace Estoque {
                 }
                 connection.Close();
             }
-            
-            LimpaCampos();
         }
 
         private void buttonLimpar_Click(object sender, EventArgs e)
@@ -122,11 +161,6 @@ namespace Estoque {
             connection.Close();
         }
 
-        private void textCodigo_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -156,43 +190,58 @@ namespace Estoque {
 
         private void maskedTextCodigo_Leave(object sender, EventArgs e)
         {
-            SqliteConnection connection;
-            String strConn = @"Data Source=" + pathSQL;
-            connection = new SqliteConnection(strConn);
-            alteracao = false;
-
-            try
+            if (!string.IsNullOrEmpty(maskedTextCodigo.Text.Trim()))
             {
-                connection.Open();
-                SqliteCommand cmd = connection.CreateCommand();
-                cmd.CommandText = $"SELECT * FROM PRODUTOS p " +
-                    $"join FABRICANTES f on f.fabricanteId = p.fabricanteId " +
-                    $"WHERE p.codigo = {maskedTextCodigo.Text}";
+                SqliteConnection connection;
+                String strConn = @"Data Source=" + pathSQL;
+                connection = new SqliteConnection(strConn);
+                alteracao = false;
 
-                SqliteDataReader reader;
-                reader = cmd.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    textDescricao.Text = Convert.ToString(reader["descricao"]);
-                    comboBoxFabricante.Text = Convert.ToString(reader["nome"]);
-                    numericQuantidade.Text = Convert.ToString(reader["quantidade"]);
-                    textPrecoCusto.Text = Convert.ToString(reader["preco_custo"]);
-                    textMargemLucro.Text = Convert.ToString(reader["margem_lucro"]);
-                    textPrecoVenda.Text = Convert.ToString(reader["preco_venda"]);
-                    alteracao = true;
+                    connection.Open();
+                    SqliteCommand cmd = connection.CreateCommand();
+                    cmd.CommandText = $"SELECT * FROM PRODUTOS p " +
+                        $"join FABRICANTES f on f.fabricanteId = p.fabricanteId " +
+                        $"WHERE p.codigo = {maskedTextCodigo.Text}";
+
+                    SqliteDataReader reader;
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        textDescricao.Text = Convert.ToString(reader["descricao"]);
+                        comboBoxFabricante.Text = Convert.ToString(reader["nome"]);
+                        numericQuantidade.Text = Convert.ToString(reader["quantidade"]);
+                        textPrecoCusto.Text = Convert.ToString(reader["preco_custo"]);
+                        textMargemLucro.Text = Convert.ToString(reader["margem_lucro"]);
+                        textPrecoVenda.Text = Convert.ToString(reader["preco_venda"]);
+                        alteracao = true;
+                    }
+
+                    reader.Dispose();
+                    cmd.Dispose();
                 }
+                catch (Exception erro)
+                {
+                    MessageBox.Show(erro.Message);
+                }
+                connection.Close();
 
-                reader.Dispose();
-                cmd.Dispose();
+                if (alteracao == false)
+                    LimpaCampos(false);
             }
-            catch (Exception erro)
+        }
+
+        private void navigationHandler(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter || e.KeyData == Keys.Down)
             {
-                MessageBox.Show(erro.Message);
+                SelectNextControl(ActiveControl, true, true, true, true);
             }
-            connection.Close();
-
-            if (alteracao == false)
-                LimpaCampos(false);
+            if (e.KeyData == Keys.Up)
+            {
+                SendKeys.Send("+{TAB}");
+            }
         }
     }
 }
