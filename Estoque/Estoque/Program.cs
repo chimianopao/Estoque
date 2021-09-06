@@ -14,7 +14,7 @@ namespace Estoque {
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CadastroWindow());
+            Application.Run(new EstoqueWindow());
         }
     }
 }
