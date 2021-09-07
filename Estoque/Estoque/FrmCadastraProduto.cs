@@ -21,7 +21,12 @@ namespace Estoque {
 
         private bool validaCampos()
         {
-            if(textDescricao.Text == "")
+            if (string.IsNullOrEmpty(maskedTextCodigo.Text.Trim()))
+            {
+                MessageBox.Show("Código é um campo obrigatório.");
+                return false;
+            }
+            if (textDescricao.Text == "")
             {
                 MessageBox.Show("Descrição é um campo obrigatório.");
                 return false;
@@ -44,7 +49,7 @@ namespace Estoque {
             if (textPrecoCusto.Text == "")
                 return "null";
             else
-                return textPrecoCusto.Text;
+                return $"'{textPrecoCusto.Text}'";
         }
 
         private string getMargemLucro()
@@ -52,7 +57,7 @@ namespace Estoque {
             if (textMargemLucro.Text == "")
                 return "null";
             else
-                return textMargemLucro.Text;
+                return $"'{textMargemLucro.Text}'";
         }
 
         private void buttonGravar_Click(object sender, EventArgs e)
@@ -73,7 +78,7 @@ namespace Estoque {
                     cmd.CommandText = $"INSERT INTO PRODUTOS (codigo, descricao, fabricanteId, quantidade, preco_custo, preco_venda, margem_lucro) " +
                         $"VALUES ({maskedTextCodigo.Text}, '{textDescricao.Text.ToUpper()}', " +
                         $"(select fab.fabricanteId from FABRICANTES fab WHERE fab.nome = '{comboBoxFabricante.Text}'), " +
-                        $"{numericQuantidade.Value}, {getPrecoCusto()}, {textPrecoVenda.Text}, {getMargemLucro()});";
+                        $"{numericQuantidade.Value}, {getPrecoCusto()}, '{textPrecoVenda.Text}', {getMargemLucro()});";
 
                     cmd.ExecuteNonQuery();
                     cmd.Dispose();
@@ -97,7 +102,7 @@ namespace Estoque {
                         $"SET descricao = '{textDescricao.Text}', " +
                         $"fabricanteId = (select fab.fabricanteId from FABRICANTES fab WHERE fab.nome = '{comboBoxFabricante.Text}'), " +
                         $"quantidade = {numericQuantidade.Value}, preco_custo = {getPrecoCusto()}, " +
-                        $"preco_venda = {textPrecoVenda.Text}, margem_lucro = {getMargemLucro()} " +
+                        $"preco_venda = '{textPrecoVenda.Text}', margem_lucro = {getMargemLucro()} " +
                         $"WHERE codigo = {maskedTextCodigo.Text}"; 
 
                     cmd.ExecuteNonQuery();
@@ -124,11 +129,13 @@ namespace Estoque {
                 maskedTextCodigo.Clear();
 
             textDescricao.Clear();
-            comboBoxFabricante.ResetText();
+            comboBoxFabricante.SelectedIndex = -1;
             numericQuantidade.Value = 1;
             textPrecoCusto.Clear();
             textPrecoVenda.Clear();
             textMargemLucro.Clear();
+
+            ActiveControl = maskedTextCodigo;
         }
 
         private void CarregaFabricantes()
@@ -188,7 +195,7 @@ namespace Estoque {
 
         }
 
-        private void maskedTextCodigo_Leave(object sender, EventArgs e)
+        private void codigo_Leave_BuscaProduto(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(maskedTextCodigo.Text.Trim()))
             {
@@ -232,6 +239,15 @@ namespace Estoque {
             }
         }
 
+        private void lucro_Leave_AplicaLucro(object sender, EventArgs e)
+        {
+            if(float.TryParse(textPrecoCusto.Text, out float bruto) &&
+                float.TryParse(textMargemLucro.Text, out float margem))
+            {
+                textPrecoVenda.Text = (bruto + (bruto * (margem / 100))).ToString("0.00");
+            }
+            
+        }
         private void navigationHandler(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter || e.KeyData == Keys.Down)

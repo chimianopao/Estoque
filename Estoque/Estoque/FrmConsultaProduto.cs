@@ -111,6 +111,8 @@ namespace Estoque {
             textPrecoCusto.Clear();
             textPrecoVenda.Clear();
             textMargemLucro.Clear();
+
+            ActiveControl = maskedTextCodigo;
         }
 
         private void buttonLimpar_Click_1(object sender, EventArgs e)

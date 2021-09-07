@@ -87,9 +87,8 @@ namespace Estoque {
             this.maskedTextCodigo.TabIndex = 0;
             this.maskedTextCodigo.ValidatingType = typeof(int);
             this.maskedTextCodigo.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextCodigo_MaskInputRejected);
-            this.maskedTextCodigo.Leave += new System.EventHandler(this.maskedTextCodigo_Leave);
             this.maskedTextCodigo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
-
+            this.maskedTextCodigo.Leave += new System.EventHandler(this.codigo_Leave_BuscaProduto);
             // 
             // buttonCadastraFabricante
             // 
@@ -103,6 +102,7 @@ namespace Estoque {
             // 
             // comboBoxFabricante
             // 
+            this.comboBoxFabricante.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFabricante.FormattingEnabled = true;
             this.comboBoxFabricante.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.comboBoxFabricante.Location = new System.Drawing.Point(89, 114);
@@ -111,9 +111,11 @@ namespace Estoque {
             this.comboBoxFabricante.Sorted = true;
             this.comboBoxFabricante.TabIndex = 2;
             this.comboBoxFabricante.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBoxFabricante.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             // 
             // numericQuantidade
             // 
+            this.numericQuantidade.InterceptArrowKeys = false;
             this.numericQuantidade.Location = new System.Drawing.Point(89, 148);
             this.numericQuantidade.Maximum = new decimal(new int[] {
             1000,
@@ -175,6 +177,7 @@ namespace Estoque {
             this.textMargemLucro.Size = new System.Drawing.Size(71, 20);
             this.textMargemLucro.TabIndex = 5;
             this.textMargemLucro.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
+            this.textMargemLucro.Leave += new System.EventHandler(this.lucro_Leave_AplicaLucro);
             // 
             // label4
             // 
