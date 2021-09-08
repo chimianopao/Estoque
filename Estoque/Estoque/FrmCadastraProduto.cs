@@ -123,11 +123,8 @@ namespace Estoque {
             LimpaCampos();
         }
 
-        private void LimpaCampos(bool limpaCodigo = true)
+        private void LimpaCampos(bool insert = false)
         {
-            if(limpaCodigo == true)
-                maskedTextCodigo.Clear();
-
             textDescricao.Clear();
             comboBoxFabricante.SelectedIndex = -1;
             numericQuantidade.Value = 1;
@@ -135,7 +132,11 @@ namespace Estoque {
             textPrecoVenda.Clear();
             textMargemLucro.Clear();
 
-            ActiveControl = maskedTextCodigo;
+            if (insert == false)
+            {
+                maskedTextCodigo.Clear();
+                ActiveControl = maskedTextCodigo;
+            }
         }
 
         private void CarregaFabricantes()
@@ -214,7 +215,7 @@ namespace Estoque {
 
                     SqliteDataReader reader;
                     reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
                         textDescricao.Text = Convert.ToString(reader["descricao"]);
                         comboBoxFabricante.Text = Convert.ToString(reader["nome"]);
@@ -235,7 +236,7 @@ namespace Estoque {
                 connection.Close();
 
                 if (alteracao == false)
-                    LimpaCampos(false);
+                    LimpaCampos(true);
             }
         }
 

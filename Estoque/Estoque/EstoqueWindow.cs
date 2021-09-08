@@ -30,5 +30,12 @@ namespace Estoque {
             cadastraProduto.MdiParent = this;
             cadastraProduto.Show();
         }
+
+        private void saidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMovimentacao movimentacao = new FrmMovimentacao();
+            movimentacao.MdiParent = this;
+            movimentacao.Show();
+        }
     }
 }

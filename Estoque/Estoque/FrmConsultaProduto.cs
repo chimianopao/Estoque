@@ -82,7 +82,7 @@ namespace Estoque {
 
                     SqliteDataReader reader;
                     reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
                         textDescricao.Text = Convert.ToString(reader["descricao"]);
                         textFabricante.Text = Convert.ToString(reader["nome"]);
@@ -90,6 +90,11 @@ namespace Estoque {
                         textPrecoCusto.Text = Convert.ToString(reader["preco_custo"]);
                         textMargemLucro.Text = Convert.ToString(reader["margem_lucro"]);
                         textPrecoVenda.Text = Convert.ToString(reader["preco_venda"]);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Produto não encontrado");
+                        LimpaCampos(false);
                     }
 
                     reader.Dispose();
@@ -102,9 +107,11 @@ namespace Estoque {
                 connection.Close();
             }
         }
-        private void LimpaCampos()
+        private void LimpaCampos(bool apagaCodigo = true)
         {
-            maskedTextCodigo.Clear();
+            if(apagaCodigo)
+                maskedTextCodigo.Clear();
+
             textDescricao.Clear();
             textFabricante.Clear();
             numericQuantidade.Value = 0;
