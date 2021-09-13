@@ -35,8 +35,12 @@
             this.Fabricante = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Quantidade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValorTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.labelQtdTotal = new System.Windows.Forms.Label();
+            this.labelValorTotal = new System.Windows.Forms.Label();
+            this.buttonGravar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMovimentacao)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,6 +69,7 @@
             this.buttonCadastraVendedor.TabIndex = 2;
             this.buttonCadastraVendedor.Text = "Cadastrar Vendedora";
             this.buttonCadastraVendedor.UseVisualStyleBackColor = true;
+            this.buttonCadastraVendedor.Click += new System.EventHandler(this.buttonCadastraVendedor_Click);
             // 
             // dataGridMovimentacao
             // 
@@ -74,7 +79,8 @@
             this.Descricao,
             this.Fabricante,
             this.Quantidade,
-            this.Valor});
+            this.Valor,
+            this.ValorTotal});
             this.dataGridMovimentacao.Location = new System.Drawing.Point(15, 69);
             this.dataGridMovimentacao.Name = "dataGridMovimentacao";
             this.dataGridMovimentacao.Size = new System.Drawing.Size(726, 288);
@@ -82,7 +88,6 @@
             this.dataGridMovimentacao.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellContentClick);
             this.dataGridMovimentacao.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellValueChanged);
             this.dataGridMovimentacao.ColumnHeaderCellChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.DataGridView1_ColumnHeaderCellChanged);
-            //this.dataGridMovimentacao.EditingControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridMovimentacao_KeyDown);
             // 
             // Codigo
             // 
@@ -108,32 +113,67 @@
             // 
             // Valor
             // 
-            this.Valor.HeaderText = "Valor";
+            this.Valor.HeaderText = "Valor Unitário";
             this.Valor.Name = "Valor";
+            // 
+            // ValorTotal
+            // 
+            this.ValorTotal.HeaderText = "Valor Total";
+            this.ValorTotal.Name = "ValorTotal";
+            this.ValorTotal.ReadOnly = true;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(545, 388);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.Size = new System.Drawing.Size(97, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Valor Total: R$";
+            this.label2.Text = "Valor SubTotal: R$";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(545, 364);
+            this.label3.Location = new System.Drawing.Point(532, 364);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.Size = new System.Drawing.Size(111, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Quantidade Total:";
+            this.label3.Text = "Quantidade SubTotal:";
+            // 
+            // labelQtdTotal
+            // 
+            this.labelQtdTotal.AutoSize = true;
+            this.labelQtdTotal.Location = new System.Drawing.Point(644, 364);
+            this.labelQtdTotal.Name = "labelQtdTotal";
+            this.labelQtdTotal.Size = new System.Drawing.Size(0, 13);
+            this.labelQtdTotal.TabIndex = 6;
+            // 
+            // labelValorTotal
+            // 
+            this.labelValorTotal.AutoSize = true;
+            this.labelValorTotal.Location = new System.Drawing.Point(642, 388);
+            this.labelValorTotal.Name = "labelValorTotal";
+            this.labelValorTotal.Size = new System.Drawing.Size(0, 13);
+            this.labelValorTotal.TabIndex = 7;
+            // 
+            // buttonGravar
+            // 
+            this.buttonGravar.Location = new System.Drawing.Point(535, 415);
+            this.buttonGravar.Name = "buttonGravar";
+            this.buttonGravar.Size = new System.Drawing.Size(75, 23);
+            this.buttonGravar.TabIndex = 8;
+            this.buttonGravar.Text = "Gravar";
+            this.buttonGravar.UseVisualStyleBackColor = true;
+            this.buttonGravar.Click += new System.EventHandler(this.buttonGravar_Click);
             // 
             // FrmMovimentacao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonGravar);
+            this.Controls.Add(this.labelValorTotal);
+            this.Controls.Add(this.labelQtdTotal);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dataGridMovimentacao);
@@ -142,6 +182,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmMovimentacao";
             this.Text = "Movimentação";
+            this.Load += new System.EventHandler(this.FrmMovimentacao_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMovimentacao)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -154,12 +195,16 @@
         private System.Windows.Forms.ComboBox comboBoxVendedores;
         private System.Windows.Forms.Button buttonCadastraVendedor;
         private System.Windows.Forms.DataGridView dataGridMovimentacao;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelQtdTotal;
+        private System.Windows.Forms.Label labelValorTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn Codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descricao;
         private System.Windows.Forms.DataGridViewTextBoxColumn Fabricante;
         private System.Windows.Forms.DataGridViewTextBoxColumn Quantidade;
         private System.Windows.Forms.DataGridViewTextBoxColumn Valor;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ValorTotal;
+        private System.Windows.Forms.Button buttonGravar;
     }
 }

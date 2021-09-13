@@ -47,10 +47,6 @@ namespace Estoque {
         private void DataGridView1_ColumnHeaderCellChanged(Object sender, DataGridViewColumnEventArgs e)
         {
 
-            System.Text.StringBuilder messageBoxCS = new System.Text.StringBuilder();
-            messageBoxCS.AppendFormat("{0} = {1}", "Column", e.Column);
-            messageBoxCS.AppendLine();
-            MessageBox.Show(messageBoxCS.ToString(), "ColumnHeaderCellChanged Event");
         }
 
         private void dataGridMovimentacao_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -72,19 +68,44 @@ namespace Estoque {
 
         private void dataGridMovimentacao_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 0)
+                if (e.ColumnIndex == 3)//quantidade
+                {
+                    if (dataGridMovimentacao.CurrentCell != null)
+                    {
+                        CalculaValorTotal();
+                        CalculaQuantidadeTotal();
+                    }
+                }
+
+                if (e.ColumnIndex == 4)//valor unitario
+                {
+                    if (dataGridMovimentacao.CurrentCell != null)
+                    {
+                        CalculaValorTotal();
+                    }
+                }
+
+            if (e.ColumnIndex == 5)//valor total
             {
                 if (dataGridMovimentacao.CurrentCell != null)
                 {
-                    if (int.TryParse(dataGridMovimentacao.CurrentCell.Value.ToString(), out int codigoProduto))
-                    {
-                        dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
-                        //dataGridMovimentacao.CurrentCell = dataGridMovimentacao[0, 0];
-                    }
-                    else
-                        MessageBox.Show("Código inválido");
+                    CalculaValorSubTotal();
                 }
             }
+
+            if (e.ColumnIndex == 0)// codigo
+                {
+                    if (dataGridMovimentacao.CurrentCell != null)
+                    {
+                        if (int.TryParse(dataGridMovimentacao.CurrentCell.Value.ToString(), out int codigoProduto))
+                        {
+                            dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
+                            //dataGridMovimentacao.CurrentCell = dataGridMovimentacao[0, 0];
+                        }
+                        else
+                            MessageBox.Show("Código inválido");
+                    }
+                }
         }
 
         private object[] buscaProduto(int codigoProduto)
@@ -122,8 +143,132 @@ namespace Estoque {
                 MessageBox.Show(erro.Message);
             }
             connection.Close();
+            
+            return new object[] { codigoProduto, descricao, nomeFabricante, 1, precoVenda, precoVenda };
+        }
 
-            return new object[] { codigoProduto, descricao, nomeFabricante, 1, precoVenda };
+        private void CalculaQuantidadeTotal()
+        {
+            int qtdTotal = 0;
+            for (int i = 0; i < dataGridMovimentacao.Rows.Count-1; i++)
+            {
+                bool passou = int.TryParse(dataGridMovimentacao[3, i].Value.ToString(), out int qtd);
+                if (passou)
+                    qtdTotal += qtd;
+            }
+
+            labelQtdTotal.Text = qtdTotal.ToString();
+        }
+
+        private void CalculaValorTotal()
+        {
+            float valorTotal = 0;
+            int currentRoll = dataGridMovimentacao.CurrentRow.Index;
+            if (dataGridMovimentacao[4, currentRoll].Value != null)
+            {
+                if (float.TryParse(dataGridMovimentacao[4, currentRoll].Value.ToString(), out float precoUnit)
+                    && int.TryParse(dataGridMovimentacao[3, currentRoll].Value.ToString(), out int quant))
+                {
+                    valorTotal = precoUnit * quant;
+                }
+                dataGridMovimentacao[5, currentRoll].Value = valorTotal;
+            }
+        }
+
+        private void CalculaValorSubTotal()
+        {
+            float valorSubTotal = 0;
+            for (int i = 0; i < dataGridMovimentacao.Rows.Count - 1; i++)
+            {
+                bool passou = float.TryParse(dataGridMovimentacao[5, i].Value.ToString(), out float preco);
+                if (passou)
+                    valorSubTotal += preco;
+            }
+
+            labelValorTotal.Text = valorSubTotal.ToString("0,00");
+        }
+
+        private void FrmMovimentacao_Load(object sender, EventArgs e)
+        {
+            CarregaVendedores();
+            labelQtdTotal.Text = "0";
+            labelValorTotal.Text = "0,00";
+        }
+
+        private void buttonGravar_Click(object sender, EventArgs e)
+        {
+            if (comboBoxVendedores.SelectedIndex == -1)
+            {
+                MessageBox.Show("Selecione uma vendedora.");
+                return;
+            }
+
+            SqliteConnection connection;
+            String strConn = @"Data Source=" + pathSQL;
+            connection = new SqliteConnection(strConn);
+
+            try
+            {
+                connection.Open();
+                SqliteCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "INSERT INTO MOVIMENTACAO_CONTROLE (codigo_vendedor, tipo, quantidade_total, valor_total, data_movimentacao) " +
+                     $"VALUES ((select vend.codigo from VENDEDORES vend WHERE vend.nome = '{comboBoxVendedores.Text}'), " +
+                        $"'SAIDA', {labelQtdTotal.Text}, '{labelValorTotal.Text}', DATETIME('NOW', 'localtime'));";
+                //MessageBox.Show(cmd.CommandText);
+
+                cmd.ExecuteNonQuery();
+                
+                cmd.Dispose();
+                MessageBox.Show("Vendedor(a) cadastrado(a) com sucesso.");
+                //MessageBox.Show(result.ToString());
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message);
+            }
+            connection.Close();
+        }
+
+        private void CarregaVendedores()
+        {
+            this.comboBoxVendedores.Items.Clear();
+            SqliteConnection connection;
+            String strConn = @"Data Source=" + pathSQL;
+            connection = new SqliteConnection(strConn);
+
+            try
+            {
+                connection.Open();
+                SqliteCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT * FROM VENDEDORES";
+
+                SqliteDataReader reader;
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    this.comboBoxVendedores.Items.Add(Convert.ToString(reader["nome"]));
+                }
+
+                reader.Dispose();
+                cmd.Dispose();
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message);
+            }
+            connection.Close();
+        }
+
+        private void buttonCadastraVendedor_Click(object sender, EventArgs e)
+        {
+            FrmCadastraVendedores cadastraVendedores = new FrmCadastraVendedores();
+            cadastraVendedores.FormClosing += new FormClosingEventHandler(this.FrmCadastraFabricante_FormClosing);
+            cadastraVendedores.ShowDialog();
+        }
+
+        private void FrmCadastraFabricante_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.CarregaVendedores();
         }
 
         //private void dataGridMovimentacao_CellLeave(object sender, DataGridViewCellEventArgs e)
