@@ -109,7 +109,9 @@ namespace Estoque {
                     {
                         if (int.TryParse(dataGridMovimentacao.CurrentCell.Value.ToString(), out int codigoProduto))
                         {
-                            dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
+                            var produto = buscaProduto(codigoProduto);
+                            if(produto != null)
+                                dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
                             //dataGridMovimentacao.CurrentCell = dataGridMovimentacao[0, 0];
                         }
                         else
@@ -145,6 +147,11 @@ namespace Estoque {
                     nomeFabricante = Convert.ToString(reader["nome"]);
                     precoVenda = Convert.ToString(reader["preco_venda"]);
                 }
+                else
+                {
+                    MessageBox.Show("Produto não encontrado.");
+                    return null;
+                }
                 reader.Dispose();
                 cmd.Dispose();
             }
@@ -153,7 +160,7 @@ namespace Estoque {
                 MessageBox.Show(erro.Message);
             }
             connection.Close();
-            
+            precoVenda = float.Parse(precoVenda).ToString("0.00");
             return new object[] { codigoProduto, descricao, nomeFabricante, 1, precoVenda, precoVenda };
         }
 
@@ -181,7 +188,7 @@ namespace Estoque {
                 {
                     valorTotal = precoUnit * quant;
                 }
-                dataGridMovimentacao[5, currentRoll].Value = valorTotal;
+                dataGridMovimentacao[5, currentRoll].Value = valorTotal.ToString("0.00");
             }
         }
 
@@ -195,7 +202,7 @@ namespace Estoque {
                     valorSubTotal += preco;
             }
 
-            labelValorTotal.Text = valorSubTotal.ToString("0,00");
+            labelValorTotal.Text = valorSubTotal.ToString("0.00");
         }
 
         private void FrmMovimentacao_Load(object sender, EventArgs e)
@@ -241,6 +248,12 @@ namespace Estoque {
             if (comboBoxVendedores.SelectedIndex == -1)
             {
                 MessageBox.Show("Selecione uma vendedora.");
+                return;
+            }
+
+            if(dataGridMovimentacao[1, 0].Value == null)
+            {
+                MessageBox.Show("Adicione pelo menos um item.");
                 return;
             }
 
@@ -305,7 +318,7 @@ namespace Estoque {
 
                 foreach (DataGridViewRow row in dataGridMovimentacao.Rows)
                 {
-                    if (row.Cells[0].Value != null)
+                    if (row.Cells[1].Value != null)
                     {
                         string codigo = row.Cells[0].Value.ToString();
                         string descricao = row.Cells[1].Value.ToString();
@@ -371,21 +384,5 @@ namespace Estoque {
         {
             this.CarregaVendedores();
         }
-
-        //private void dataGridMovimentacao_CellLeave(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    //dataGridMovimentacao.CurrentRow.SetValues(new object[] { 454, "pijama", "marcyn", 4, "15,50" });
-        //    if (e.ColumnIndex == 0)
-        //    {
-        //        MessageBox.Show(dataGridMovimentacao.CurrentRow.Cells[0].FormattedValue.ToString());
-        //        if(dataGridMovimentacao.CurrentCell.Value != null)
-        //            MessageBox.Show(dataGridMovimentacao.CurrentCell.Value.ToString());
-        //        //dataGridMovimentacao.CurrentRow.SetValues(buscaProduto());
-
-
-        //        dataGridMovimentacao.CurrentRow.SetValues(new object[] { dataGridMovimentacao.CurrentCell.Value, "pijama", "marcyn", 1, "15,50" });
-        //        //dataGridMovimentacao.get
-        //    }
-        //}
     }
 }

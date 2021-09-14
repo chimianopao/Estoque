@@ -49,6 +49,7 @@
             // labelTipoMovimentacao
             // 
             this.labelTipoMovimentacao.AutoSize = true;
+            this.labelTipoMovimentacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTipoMovimentacao.Location = new System.Drawing.Point(12, 9);
             this.labelTipoMovimentacao.Name = "labelTipoMovimentacao";
             this.labelTipoMovimentacao.Size = new System.Drawing.Size(39, 13);
@@ -127,7 +128,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(545, 388);
+            this.label2.Location = new System.Drawing.Point(532, 388);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(97, 13);
             this.label2.TabIndex = 4;
@@ -153,7 +154,7 @@
             // labelValorTotal
             // 
             this.labelValorTotal.AutoSize = true;
-            this.labelValorTotal.Location = new System.Drawing.Point(642, 388);
+            this.labelValorTotal.Location = new System.Drawing.Point(629, 388);
             this.labelValorTotal.Name = "labelValorTotal";
             this.labelValorTotal.Size = new System.Drawing.Size(0, 13);
             this.labelValorTotal.TabIndex = 7;
