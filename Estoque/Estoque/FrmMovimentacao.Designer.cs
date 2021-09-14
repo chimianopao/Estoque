@@ -26,7 +26,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTipoMovimentacao = new System.Windows.Forms.Label();
             this.comboBoxVendedores = new System.Windows.Forms.ComboBox();
             this.buttonCadastraVendedor = new System.Windows.Forms.Button();
             this.dataGridMovimentacao = new System.Windows.Forms.DataGridView();
@@ -46,14 +46,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMovimentacao)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // labelTipoMovimentacao
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "SAÍDA";
+            this.labelTipoMovimentacao.AutoSize = true;
+            this.labelTipoMovimentacao.Location = new System.Drawing.Point(12, 9);
+            this.labelTipoMovimentacao.Name = "labelTipoMovimentacao";
+            this.labelTipoMovimentacao.Size = new System.Drawing.Size(39, 13);
+            this.labelTipoMovimentacao.TabIndex = 0;
+            this.labelTipoMovimentacao.Text = "SAÍDA";
             // 
             // comboBoxVendedores
             // 
@@ -200,7 +200,7 @@
             this.Controls.Add(this.dataGridMovimentacao);
             this.Controls.Add(this.buttonCadastraVendedor);
             this.Controls.Add(this.comboBoxVendedores);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelTipoMovimentacao);
             this.Name = "FrmMovimentacao";
             this.Text = "Movimentação";
             this.Load += new System.EventHandler(this.FrmMovimentacao_Load);
@@ -212,7 +212,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTipoMovimentacao;
         private System.Windows.Forms.ComboBox comboBoxVendedores;
         private System.Windows.Forms.Button buttonCadastraVendedor;
         private System.Windows.Forms.DataGridView dataGridMovimentacao;

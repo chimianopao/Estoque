@@ -33,7 +33,14 @@ namespace Estoque {
 
         private void saidaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmMovimentacao movimentacao = new FrmMovimentacao();
+            FrmMovimentacao movimentacao = new FrmMovimentacao("SAIDA");
+            movimentacao.MdiParent = this;
+            movimentacao.Show();
+        }
+
+        private void entradaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmMovimentacao movimentacao = new FrmMovimentacao("ENTRADA");
             movimentacao.MdiParent = this;
             movimentacao.Show();
         }

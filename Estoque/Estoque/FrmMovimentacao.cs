@@ -12,10 +12,19 @@ using System.Windows.Forms;
 namespace Estoque {
     public partial class FrmMovimentacao : Form {
         string pathSQL = System.IO.Path.Combine(Environment.CurrentDirectory, @"sql\", "estoque.db");
-
-        public FrmMovimentacao()
+        string tipoMovimentacao = "SAIDA";
+        public FrmMovimentacao(string tipo)
         {
             InitializeComponent();
+            tipoMovimentacao = tipo;
+            if (tipo.Equals("SAIDA"))
+            {
+                labelTipoMovimentacao.Text = "SAÍDA";
+            }
+            else
+            {
+                labelTipoMovimentacao.Text = "ENTRADA";
+            }
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -268,7 +277,7 @@ namespace Estoque {
                 SqliteCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "INSERT INTO MOVIMENTACAO_CONTROLE (id_movimentacao, codigo_vendedor, tipo, quantidade_total, valor_total, data_movimentacao) " +
                      $"VALUES ({labelNrMovimentacao.Text}, (select vend.codigo from VENDEDORES vend WHERE vend.nome = '{comboBoxVendedores.Text}'), " +
-                        $"'SAIDA', {labelQtdTotal.Text}, '{labelValorTotal.Text}', DATETIME('NOW', 'localtime'));";
+                        $"'{tipoMovimentacao}', {labelQtdTotal.Text}, '{labelValorTotal.Text}', DATETIME('NOW', 'localtime'));";
 
                 cmd.ExecuteNonQuery();
 
@@ -305,7 +314,7 @@ namespace Estoque {
                         string valorUnit = row.Cells[4].Value.ToString();
 
                         cmd.CommandText = "INSERT INTO MOVIMENTACAO (id_movimentacao, codigo_produto, quantidade, tipo, preco_venda, data_movimentacao) " +
-                            $"VALUES ({labelNrMovimentacao.Text}, {codigo}, {quantidade}, 'SAIDA', '{valorUnit}', DATETIME('NOW', 'localtime'));";
+                            $"VALUES ({labelNrMovimentacao.Text}, {codigo}, {quantidade}, '{tipoMovimentacao}', '{valorUnit}', DATETIME('NOW', 'localtime'));";
 
                         cmd.ExecuteNonQuery();
                     }

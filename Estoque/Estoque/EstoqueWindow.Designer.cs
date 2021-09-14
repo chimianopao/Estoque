@@ -75,6 +75,7 @@
             this.entradaToolStripMenuItem.Name = "entradaToolStripMenuItem";
             this.entradaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.entradaToolStripMenuItem.Text = "Entrada";
+            this.entradaToolStripMenuItem.Click += new System.EventHandler(this.entradaToolStripMenuItem_Click);
             // 
             // saidaToolStripMenuItem
             // 
