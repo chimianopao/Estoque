@@ -41,6 +41,8 @@
             this.labelQtdTotal = new System.Windows.Forms.Label();
             this.labelValorTotal = new System.Windows.Forms.Label();
             this.buttonGravar = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.labelNrMovimentacao = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMovimentacao)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,11 +168,30 @@
             this.buttonGravar.UseVisualStyleBackColor = true;
             this.buttonGravar.Click += new System.EventHandler(this.buttonGravar_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 36);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(21, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Nr:";
+            // 
+            // labelNrMovimentacao
+            // 
+            this.labelNrMovimentacao.AutoSize = true;
+            this.labelNrMovimentacao.Location = new System.Drawing.Point(36, 36);
+            this.labelNrMovimentacao.Name = "labelNrMovimentacao";
+            this.labelNrMovimentacao.Size = new System.Drawing.Size(0, 13);
+            this.labelNrMovimentacao.TabIndex = 10;
+            // 
             // FrmMovimentacao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labelNrMovimentacao);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.buttonGravar);
             this.Controls.Add(this.labelValorTotal);
             this.Controls.Add(this.labelQtdTotal);
@@ -206,5 +227,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Valor;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValorTotal;
         private System.Windows.Forms.Button buttonGravar;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label labelNrMovimentacao;
     }
 }

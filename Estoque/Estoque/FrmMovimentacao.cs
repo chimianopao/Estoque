@@ -12,6 +12,7 @@ using System.Windows.Forms;
 namespace Estoque {
     public partial class FrmMovimentacao : Form {
         string pathSQL = System.IO.Path.Combine(Environment.CurrentDirectory, @"sql\", "estoque.db");
+
         public FrmMovimentacao()
         {
             InitializeComponent();
@@ -193,6 +194,37 @@ namespace Estoque {
             CarregaVendedores();
             labelQtdTotal.Text = "0";
             labelValorTotal.Text = "0,00";
+            labelNrMovimentacao.Text = (getUltimaMovimentacao() + 1).ToString();
+        }
+
+        private int getUltimaMovimentacao()
+        {
+            SqliteConnection connection;
+            String strConn = @"Data Source=" + pathSQL;
+            connection = new SqliteConnection(strConn);
+            int ultMovimento = 0;
+            try
+            {
+                connection.Open();
+                SqliteCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT id_movimentacao FROM MOVIMENTACAO_CONTROLE WHERE id_movimentacao = (SELECT MAX(id_movimentacao)  FROM MOVIMENTACAO_CONTROLE)";
+
+                SqliteDataReader reader;
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    ultMovimento = Convert.ToInt32(reader["id_movimentacao"]);
+                }
+
+                reader.Dispose();
+                cmd.Dispose();
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message);
+            }
+            connection.Close();
+            return ultMovimento;
         }
 
         private void buttonGravar_Click(object sender, EventArgs e)
@@ -203,6 +235,29 @@ namespace Estoque {
                 return;
             }
 
+            bool movControleSucesso = insertMovimentacaoControle();
+            if (movControleSucesso)
+            {
+                insertMovimentacao();
+            }
+
+            MessageBox.Show("Movimentação " + labelNrMovimentacao.Text + " gravada com sucesso.");
+
+            resetCampos();
+        }
+
+        private void resetCampos()
+        {
+            dataGridMovimentacao.Rows.Clear();
+            labelNrMovimentacao.Text = (getUltimaMovimentacao() + 1).ToString();
+            labelQtdTotal.Text = "0";
+            labelValorTotal.Text = "0,00";
+            comboBoxVendedores.SelectedIndex = -1;
+        }
+
+        private bool insertMovimentacaoControle()
+        {
+            bool sucesso = false;
             SqliteConnection connection;
             String strConn = @"Data Source=" + pathSQL;
             connection = new SqliteConnection(strConn);
@@ -211,20 +266,57 @@ namespace Estoque {
             {
                 connection.Open();
                 SqliteCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "INSERT INTO MOVIMENTACAO_CONTROLE (codigo_vendedor, tipo, quantidade_total, valor_total, data_movimentacao) " +
-                     $"VALUES ((select vend.codigo from VENDEDORES vend WHERE vend.nome = '{comboBoxVendedores.Text}'), " +
+                cmd.CommandText = "INSERT INTO MOVIMENTACAO_CONTROLE (id_movimentacao, codigo_vendedor, tipo, quantidade_total, valor_total, data_movimentacao) " +
+                     $"VALUES ({labelNrMovimentacao.Text}, (select vend.codigo from VENDEDORES vend WHERE vend.nome = '{comboBoxVendedores.Text}'), " +
                         $"'SAIDA', {labelQtdTotal.Text}, '{labelValorTotal.Text}', DATETIME('NOW', 'localtime'));";
-                //MessageBox.Show(cmd.CommandText);
 
                 cmd.ExecuteNonQuery();
-                
+
                 cmd.Dispose();
-                MessageBox.Show("Vendedor(a) cadastrado(a) com sucesso.");
-                //MessageBox.Show(result.ToString());
+                sucesso = true;
             }
             catch (Exception erro)
             {
                 MessageBox.Show(erro.Message);
+            }
+            connection.Close();
+            return sucesso;
+        }
+
+        private void insertMovimentacao()
+        {
+            SqliteConnection connection;
+            String strConn = @"Data Source=" + pathSQL;
+            connection = new SqliteConnection(strConn);
+
+            try
+            {
+                connection.Open();
+                SqliteCommand cmd = connection.CreateCommand();
+
+                foreach (DataGridViewRow row in dataGridMovimentacao.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string codigo = row.Cells[0].Value.ToString();
+                        string descricao = row.Cells[1].Value.ToString();
+                        string fabricante = row.Cells[2].Value.ToString();
+                        string quantidade = row.Cells[3].Value.ToString();
+                        string valorUnit = row.Cells[4].Value.ToString();
+
+                        cmd.CommandText = "INSERT INTO MOVIMENTACAO (id_movimentacao, codigo_produto, quantidade, tipo, preco_venda, data_movimentacao) " +
+                            $"VALUES ({labelNrMovimentacao.Text}, {codigo}, {quantidade}, 'SAIDA', '{valorUnit}', DATETIME('NOW', 'localtime'));";
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                cmd.Dispose();
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message);
+                connection.Close();
             }
             connection.Close();
         }
