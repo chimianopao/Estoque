@@ -34,7 +34,9 @@
             // 
             // textNome
             // 
+            this.textNome.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textNome.Location = new System.Drawing.Point(68, 30);
+            this.textNome.MaxLength = 17;
             this.textNome.Name = "textNome";
             this.textNome.Size = new System.Drawing.Size(177, 20);
             this.textNome.TabIndex = 0;

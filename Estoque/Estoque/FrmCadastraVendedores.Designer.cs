@@ -67,6 +67,7 @@
             // 
             // textNome
             // 
+            this.textNome.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textNome.Location = new System.Drawing.Point(69, 37);
             this.textNome.Name = "textNome";
             this.textNome.Size = new System.Drawing.Size(177, 20);
@@ -84,6 +85,7 @@
             // textTelefone
             // 
             this.textTelefone.Location = new System.Drawing.Point(69, 73);
+            this.textTelefone.MaxLength = 50;
             this.textTelefone.Name = "textTelefone";
             this.textTelefone.Size = new System.Drawing.Size(94, 20);
             this.textTelefone.TabIndex = 8;
@@ -100,6 +102,7 @@
             // textEmail
             // 
             this.textEmail.Location = new System.Drawing.Point(69, 109);
+            this.textEmail.MaxLength = 70;
             this.textEmail.Name = "textEmail";
             this.textEmail.Size = new System.Drawing.Size(177, 20);
             this.textEmail.TabIndex = 10;

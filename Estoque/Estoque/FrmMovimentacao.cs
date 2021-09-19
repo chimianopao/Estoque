@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace Estoque {
     public partial class FrmMovimentacao : Form {
         string pathSQL = System.IO.Path.Combine(Environment.CurrentDirectory, @"sql\", "estoque.db");
         string tipoMovimentacao = "SAIDA";
+        private int numberOfItemsPerPage = 0;
+        private int numberOfItemsPrintedSoFar = 0;
+        private List<string> backupValorUnit = new List<string>();
         public FrmMovimentacao(string tipo)
         {
             InitializeComponent();
@@ -107,7 +111,7 @@ namespace Estoque {
                 {
                     if (dataGridMovimentacao.CurrentCell != null)
                     {
-                        if (int.TryParse(dataGridMovimentacao.CurrentCell.Value.ToString(), out int codigoProduto))
+                        if (long.TryParse(dataGridMovimentacao.CurrentCell.Value?.ToString(), out long codigoProduto))
                         {
                             var produto = buscaProduto(codigoProduto);
                             if(produto != null)
@@ -120,7 +124,7 @@ namespace Estoque {
                 }
         }
 
-        private object[] buscaProduto(int codigoProduto)
+        private object[] buscaProduto(long codigoProduto)
         {
             SqliteConnection connection;
             String strConn = @"Data Source=" + pathSQL;
@@ -167,20 +171,21 @@ namespace Estoque {
         private void CalculaQuantidadeTotal()
         {
             int qtdTotal = 0;
-            for (int i = 0; i < dataGridMovimentacao.Rows.Count-1; i++)
+            for (int i = 0; i < dataGridMovimentacao.Rows.Count - 1; i++)
             {
-                bool passou = int.TryParse(dataGridMovimentacao[3, i].Value.ToString(), out int qtd);
-                if (passou)
-                    qtdTotal += qtd;
+                    bool passou = int.TryParse(dataGridMovimentacao[3, i].Value?.ToString(), out int qtd);
+                    if (passou)
+                        qtdTotal += qtd;
             }
 
             labelQtdTotal.Text = qtdTotal.ToString();
         }
 
-        private void CalculaValorTotal()
+        private void CalculaValorTotal(int currentRoll = -1)
         {
             float valorTotal = 0;
-            int currentRoll = dataGridMovimentacao.CurrentRow.Index;
+            if(currentRoll == -1)
+                currentRoll = dataGridMovimentacao.CurrentRow.Index;
             if (dataGridMovimentacao[4, currentRoll].Value != null)
             {
                 if (float.TryParse(dataGridMovimentacao[4, currentRoll].Value.ToString(), out float precoUnit)
@@ -197,7 +202,7 @@ namespace Estoque {
             float valorSubTotal = 0;
             for (int i = 0; i < dataGridMovimentacao.Rows.Count - 1; i++)
             {
-                bool passou = float.TryParse(dataGridMovimentacao[5, i].Value.ToString(), out float preco);
+                bool passou = float.TryParse(dataGridMovimentacao[5, i].Value?.ToString(), out float preco);
                 if (passou)
                     valorSubTotal += preco;
             }
@@ -211,6 +216,7 @@ namespace Estoque {
             labelQtdTotal.Text = "0";
             labelValorTotal.Text = "0,00";
             labelNrMovimentacao.Text = (getUltimaMovimentacao() + 1).ToString();
+            labelData.Text = DateTime.Today.ToShortDateString();
         }
 
         private int getUltimaMovimentacao()
@@ -383,6 +389,145 @@ namespace Estoque {
         private void FrmCadastraFabricante_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.CarregaVendedores();
+        }
+
+        private void buttonImprimir_Click(object sender, EventArgs e)
+        {
+            //CaptureScreen();
+            //printDocument1.Print();
+            System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
+            PrintDialog1.AllowSomePages = true;
+            PrintDialog1.ShowHelp = true;
+            PrintDialog1.Document = printDocument1;
+            DialogResult result = PrintDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                printDocument1.Print();
+            }
+        }
+        private PrintDocument printDocument1 = new PrintDocument();
+        Bitmap memoryImage;
+        private void CaptureScreen()
+        {
+            Graphics myGraphics = this.CreateGraphics();
+            Size s = this.Size;
+            memoryImage = new Bitmap(s.Width, s.Height, myGraphics);
+            Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+            memoryGraphics.CopyFromScreen(this.Location.X, this.Location.Y, 0, 0, s);
+        }
+        
+        private void printDocument1_PrintPage(System.Object sender,
+           System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            //e.Graphics.DrawImage(memoryImage, 0, 0);
+            //int numberOfItemsPerPage = 0;
+            //int numberOfItemsPrintedSoFar = 0;
+
+            e.Graphics.DrawString($"MOVIMENTAÇÃO {labelTipoMovimentacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 10);
+            e.Graphics.DrawString($"Número {labelNrMovimentacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 30);
+            e.Graphics.DrawString($"Vendedora: {comboBoxVendedores.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 50);
+            e.Graphics.DrawString(DateTime.Today.ToShortDateString(), new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 10);
+            
+            
+
+            string curdhead = "Monetti";
+            e.Graphics.DrawString(curdhead, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 350, 50);
+            e.Graphics.DrawString($"Obs: {textBoxObservacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 150, 70);
+
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, 90, 900, 90);
+
+            string g1 = "Código";
+            e.Graphics.DrawString(g1, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 95);
+
+            string g2 = "Descrição";
+            e.Graphics.DrawString(g2, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 130, 95);//100
+
+            string g3 = "Fabricante";
+            e.Graphics.DrawString(g3, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 420, 95);//300
+
+            string g4 = "Qtd";
+            e.Graphics.DrawString(g4, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 570, 95);//450
+
+            string g5 = "Preço Unit";
+            e.Graphics.DrawString(g5, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 620, 95);//500
+
+            string g6 = "Preço Total";
+            e.Graphics.DrawString(g6, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 95);//600
+
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, 115, 900, 115);
+
+            int height = 100;
+            for (int l = numberOfItemsPrintedSoFar; l < dataGridMovimentacao.Rows.Count; l++)
+            {
+                numberOfItemsPerPage = numberOfItemsPerPage + 1;
+                if (numberOfItemsPerPage <= 40)
+                {
+                    numberOfItemsPrintedSoFar++;
+
+                    if (numberOfItemsPrintedSoFar <= dataGridMovimentacao.Rows.Count)
+                    {
+
+                        height += dataGridMovimentacao.Rows[0].Height;
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[0].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(30, height, dataGridMovimentacao.Columns[0].Width, dataGridMovimentacao.Rows[0].Height));
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[1].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(130, height, dataGridMovimentacao.Columns[1].Width, dataGridMovimentacao.Rows[0].Height));
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[2].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(420, height, dataGridMovimentacao.Columns[2].Width, dataGridMovimentacao.Rows[0].Height));
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[3].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(570, height, dataGridMovimentacao.Columns[3].Width, dataGridMovimentacao.Rows[0].Height));
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[4].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(620, height, dataGridMovimentacao.Columns[4].Width, dataGridMovimentacao.Rows[0].Height));
+                        e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[5].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(720, height, dataGridMovimentacao.Columns[5].Width, dataGridMovimentacao.Rows[0].Height));
+                    }
+                    else
+                    {
+                        e.HasMorePages = false;
+                    }
+
+                }
+                else
+                {
+                    numberOfItemsPerPage = 0;
+                    e.HasMorePages = true;
+                    return;
+
+                }
+
+
+            }
+            numberOfItemsPerPage = 0;
+            numberOfItemsPrintedSoFar = 0;
+            //e.Graphics.DrawString(l2, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 0, height-5);
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, height-5, 900, height-5);
+            e.Graphics.DrawString($"{labelQtdTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 570, height + 5);
+            e.Graphics.DrawString($"R$ {labelValorTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 700, height + 5);
+        }
+
+
+
+        private void buttonAplicaPercentual_Click(object sender, EventArgs e)
+        {
+            backupValorUnit.Clear();
+            //backupDataGrid.Rows.Clear();
+
+            for (int i = 0; i < dataGridMovimentacao.Rows.Count; i++)
+            {
+                if(dataGridMovimentacao.Rows[i].Cells[4].Value != null)
+                {
+                    backupValorUnit.Add(dataGridMovimentacao.Rows[i].Cells[4].Value.ToString());
+
+                    var novoValor = float.Parse(dataGridMovimentacao.Rows[i].Cells[4].Value?.ToString());
+                    novoValor = novoValor + (novoValor * (float.Parse(textBoxPercentual.Text) / 100));
+                    dataGridMovimentacao.Rows[i].Cells[4].Value = novoValor.ToString("0.00");
+                    CalculaValorTotal(i);
+                }
+            }
+        }
+
+        private void buttonRestauraValores_Click(object sender, EventArgs e)
+        {
+            //dataGridMovimentacao.Rows.Clear();
+            for (int i = 0; i < backupValorUnit.Count; i++)
+            {
+                dataGridMovimentacao.Rows[i].Cells[4].Value = backupValorUnit[i];
+                CalculaValorTotal(i);
+            }
         }
     }
 }

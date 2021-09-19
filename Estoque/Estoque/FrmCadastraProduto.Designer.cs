@@ -244,8 +244,9 @@ namespace Estoque {
             // 
             this.textDescricao.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textDescricao.Location = new System.Drawing.Point(89, 84);
+            this.textDescricao.MaxLength = 34;
             this.textDescricao.Name = "textDescricao";
-            this.textDescricao.Size = new System.Drawing.Size(346, 20);
+            this.textDescricao.Size = new System.Drawing.Size(261, 20);
             this.textDescricao.TabIndex = 1;
             this.textDescricao.TextChanged += new System.EventHandler(this.textDescricao_TextChanged);
             this.textDescricao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
