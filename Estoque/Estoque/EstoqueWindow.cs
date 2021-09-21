@@ -44,5 +44,12 @@ namespace Estoque {
             movimentacao.MdiParent = this;
             movimentacao.Show();
         }
+
+        private void consultaToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmConsultaMovimentacao consultaMovimentacao = new FrmConsultaMovimentacao();
+            consultaMovimentacao.MdiParent = this;
+            consultaMovimentacao.Show();
+        }
     }
 }

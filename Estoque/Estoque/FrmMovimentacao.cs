@@ -503,8 +503,13 @@ namespace Estoque {
 
         private void buttonAplicaPercentual_Click(object sender, EventArgs e)
         {
+            if(!float.TryParse(textBoxPercentual.Text, out float a))
+            {
+                MessageBox.Show("Número Inválido!");
+                return;
+            }
+
             backupValorUnit.Clear();
-            //backupDataGrid.Rows.Clear();
 
             for (int i = 0; i < dataGridMovimentacao.Rows.Count; i++)
             {
@@ -522,7 +527,6 @@ namespace Estoque {
 
         private void buttonRestauraValores_Click(object sender, EventArgs e)
         {
-            //dataGridMovimentacao.Rows.Clear();
             for (int i = 0; i < backupValorUnit.Count; i++)
             {
                 dataGridMovimentacao.Rows[i].Cells[4].Value = backupValorUnit[i];

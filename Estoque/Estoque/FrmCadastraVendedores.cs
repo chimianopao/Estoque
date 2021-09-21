@@ -33,15 +33,32 @@ namespace Estoque {
             {
                 connection.Open();
                 SqliteCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "INSERT INTO VENDEDORES (nome, telefone, email) VALUES (@nome, @telefone, @email);";
 
-                cmd.Parameters.AddWithValue("@nome", textNome.Text);
-                cmd.Parameters.AddWithValue("@telefone", textTelefone.Text);
-                cmd.Parameters.AddWithValue("@email", textEmail.Text);
+                cmd.CommandText = $"SELECT * FROM VENDEDORES WHERE nome = '{textNome.Text}'";
+                SqliteDataReader reader;
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    MessageBox.Show("Vendedor(a) já cadastrado(a)!");
+                    reader.Close();
+                }
 
-                cmd.ExecuteNonQuery();
+                else
+                {
+                    reader.Close();
+
+                    cmd.CommandText = "INSERT INTO VENDEDORES (nome, telefone, email) VALUES (@nome, @telefone, @email);";
+
+                    cmd.Parameters.AddWithValue("@nome", textNome.Text);
+                    cmd.Parameters.AddWithValue("@telefone", textTelefone.Text);
+                    cmd.Parameters.AddWithValue("@email", textEmail.Text);
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Vendedor(a) cadastrado(a) com sucesso.");
+                }
+
                 cmd.Dispose();
-                MessageBox.Show("Vendedor(a) cadastrado(a) com sucesso.");
+
             }
             catch (Exception erro)
             {

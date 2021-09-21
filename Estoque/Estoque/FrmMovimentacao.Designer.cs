@@ -101,7 +101,7 @@ namespace Estoque {
             this.ValorTotal});
             this.dataGridMovimentacao.Location = new System.Drawing.Point(15, 69);
             this.dataGridMovimentacao.Name = "dataGridMovimentacao";
-            this.dataGridMovimentacao.Size = new System.Drawing.Size(773, 288);
+            this.dataGridMovimentacao.Size = new System.Drawing.Size(804, 288);
             this.dataGridMovimentacao.TabIndex = 3;
             this.dataGridMovimentacao.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellContentClick);
             this.dataGridMovimentacao.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellValueChanged);
@@ -110,7 +110,7 @@ namespace Estoque {
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(532, 388);
+            this.label2.Location = new System.Drawing.Point(583, 393);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(97, 13);
             this.label2.TabIndex = 4;
@@ -119,7 +119,7 @@ namespace Estoque {
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(532, 364);
+            this.label3.Location = new System.Drawing.Point(583, 369);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 13);
             this.label3.TabIndex = 5;
@@ -128,7 +128,7 @@ namespace Estoque {
             // labelQtdTotal
             // 
             this.labelQtdTotal.AutoSize = true;
-            this.labelQtdTotal.Location = new System.Drawing.Point(644, 364);
+            this.labelQtdTotal.Location = new System.Drawing.Point(695, 369);
             this.labelQtdTotal.Name = "labelQtdTotal";
             this.labelQtdTotal.Size = new System.Drawing.Size(0, 13);
             this.labelQtdTotal.TabIndex = 6;
@@ -136,14 +136,14 @@ namespace Estoque {
             // labelValorTotal
             // 
             this.labelValorTotal.AutoSize = true;
-            this.labelValorTotal.Location = new System.Drawing.Point(629, 388);
+            this.labelValorTotal.Location = new System.Drawing.Point(680, 393);
             this.labelValorTotal.Name = "labelValorTotal";
             this.labelValorTotal.Size = new System.Drawing.Size(0, 13);
             this.labelValorTotal.TabIndex = 7;
             // 
             // buttonGravar
             // 
-            this.buttonGravar.Location = new System.Drawing.Point(535, 415);
+            this.buttonGravar.Location = new System.Drawing.Point(586, 420);
             this.buttonGravar.Name = "buttonGravar";
             this.buttonGravar.Size = new System.Drawing.Size(75, 23);
             this.buttonGravar.TabIndex = 8;
@@ -170,7 +170,7 @@ namespace Estoque {
             // 
             // buttonImprimir
             // 
-            this.buttonImprimir.Location = new System.Drawing.Point(622, 415);
+            this.buttonImprimir.Location = new System.Drawing.Point(673, 420);
             this.buttonImprimir.Name = "buttonImprimir";
             this.buttonImprimir.Size = new System.Drawing.Size(75, 23);
             this.buttonImprimir.TabIndex = 11;
@@ -201,7 +201,7 @@ namespace Estoque {
             // labelData
             // 
             this.labelData.AutoSize = true;
-            this.labelData.Location = new System.Drawing.Point(555, 38);
+            this.labelData.Location = new System.Drawing.Point(763, 10);
             this.labelData.Name = "labelData";
             this.labelData.Size = new System.Drawing.Size(0, 13);
             this.labelData.TabIndex = 12;
@@ -277,7 +277,7 @@ namespace Estoque {
             this.Descricao.HeaderText = "Descrição";
             this.Descricao.Name = "Descricao";
             this.Descricao.ReadOnly = true;
-            this.Descricao.Width = 250;
+            this.Descricao.Width = 280;
             // 
             // Fabricante
             // 
@@ -309,7 +309,7 @@ namespace Estoque {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(860, 450);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBoxObservacao);
             this.Controls.Add(this.buttonRestauraValores);

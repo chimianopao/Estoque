@@ -27,13 +27,28 @@ namespace Estoque {
             {
                 connection.Open();
                 SqliteCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "INSERT INTO FABRICANTES (nome) VALUES (@nome);";
 
-                cmd.Parameters.AddWithValue("@nome", textNome.Text);
+                cmd.CommandText = $"SELECT * FROM FABRICANTES WHERE nome = '{textNome.Text}'";
+                SqliteDataReader reader;
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    MessageBox.Show("Fabricante já cadastrado!");
+                    reader.Close();
+                }
 
-                cmd.ExecuteNonQuery();
+                else
+                {
+                    reader.Close();
+                    cmd.CommandText = "INSERT INTO FABRICANTES (nome) VALUES (@nome);";
+
+                    cmd.Parameters.AddWithValue("@nome", textNome.Text);
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Fabricante cadastrado com sucesso.");
+                }
+
                 cmd.Dispose();
-                MessageBox.Show("Fabricante cadastrado com sucesso.");
             }
             catch (Exception erro)
             {
