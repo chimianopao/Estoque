@@ -172,5 +172,78 @@ namespace Estoque {
             e.Graphics.DrawString($"{labelQuantidadeTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 570, height + 5);
             e.Graphics.DrawString($"R$ {labelValorTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 700, height + 5);
         }
+
+        private void buttonAplicaPercentual_Click(object sender, EventArgs e)
+        {
+            if (!float.TryParse(textBoxPercentual.Text, out float a))
+            {
+                MessageBox.Show("Número Inválido!");
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show($"Adicionar {textBoxPercentual.Text}% ?", "Alerta", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+
+            for (int i = 0; i < dataGridViewMovimentacao.Rows.Count; i++)
+            {
+                if (dataGridViewMovimentacao.Rows[i].Cells[4].Value != null)
+                {
+
+                    var novoValor = float.Parse(dataGridViewMovimentacao.Rows[i].Cells[4].Value?.ToString());
+                    novoValor = novoValor + (novoValor * (float.Parse(textBoxPercentual.Text) / 100));
+                    dataGridViewMovimentacao.Rows[i].Cells[4].Value = novoValor.ToString("0.00");
+                    CalculaValorTotal(i);
+                }
+            }
+
+            CalculaQuantidadeTotal();
+            CalculaValorSubTotal();
+        }
+
+        private void CalculaValorTotal(int currentRoll = -1)
+        {
+            float valorTotal = 0;
+            if (currentRoll == -1)
+                currentRoll = dataGridViewMovimentacao.CurrentRow.Index;
+            if (dataGridViewMovimentacao[4, currentRoll].Value != null)
+            {
+                if (float.TryParse(dataGridViewMovimentacao[4, currentRoll].Value.ToString(), out float precoUnit)
+                    && int.TryParse(dataGridViewMovimentacao[3, currentRoll].Value.ToString(), out int quant))
+                {
+                    valorTotal = precoUnit * quant;
+                }
+                dataGridViewMovimentacao[5, currentRoll].Value = valorTotal.ToString("0.00");
+            }
+        }
+
+        private void CalculaQuantidadeTotal()
+        {
+            int qtdTotal = 0;
+            for (int i = 0; i < dataGridViewMovimentacao.Rows.Count - 1; i++)
+            {
+                bool passou = int.TryParse(dataGridViewMovimentacao[3, i].Value?.ToString(), out int qtd);
+                if (passou)
+                    qtdTotal += qtd;
+            }
+
+            labelQuantidadeTotal.Text = qtdTotal.ToString();
+        }
+
+        private void CalculaValorSubTotal()
+        {
+            float valorSubTotal = 0;
+            for (int i = 0; i < dataGridViewMovimentacao.Rows.Count - 1; i++)
+            {
+                bool passou = float.TryParse(dataGridViewMovimentacao[5, i].Value?.ToString(), out float preco);
+                if (passou)
+                    valorSubTotal += preco;
+            }
+
+            labelValorTotal.Text = valorSubTotal.ToString("0.00");
+        }
+
     }
 }
