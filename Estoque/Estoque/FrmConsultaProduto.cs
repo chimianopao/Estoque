@@ -90,10 +90,12 @@ namespace Estoque {
                         textPrecoCusto.Text = Convert.ToString(reader["preco_custo"]);
                         textMargemLucro.Text = Convert.ToString(reader["margem_lucro"]);
                         textPrecoVenda.Text = Convert.ToString(reader["preco_venda"]);
+
+                        labelProdutoNaoEncontrado.Text = "";
                     }
                     else
                     {
-                        MessageBox.Show("Produto não encontrado");
+                        labelProdutoNaoEncontrado.Text = "Produto não encontrado!";
                         LimpaCampos(false);
                     }
 
@@ -107,10 +109,21 @@ namespace Estoque {
                 connection.Close();
             }
         }
+
+        private void maskedTextCodigo_GotFocus(object sender, EventArgs e)
+        {
+            if(maskedTextCodigo.Text.Length > 0)
+                maskedTextCodigo.SelectAll();
+        }
+
         private void LimpaCampos(bool apagaCodigo = true)
         {
-            if(apagaCodigo)
+            if (apagaCodigo)
+            {
                 maskedTextCodigo.Clear();
+                ActiveControl = maskedTextCodigo;
+                labelProdutoNaoEncontrado.Text = "";
+            }
 
             textDescricao.Clear();
             textFabricante.Clear();
@@ -118,8 +131,6 @@ namespace Estoque {
             textPrecoCusto.Clear();
             textPrecoVenda.Clear();
             textMargemLucro.Clear();
-
-            ActiveControl = maskedTextCodigo;
         }
 
         private void buttonLimpar_Click_1(object sender, EventArgs e)

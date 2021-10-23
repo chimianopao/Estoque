@@ -46,12 +46,14 @@ namespace Estoque {
             this.label2 = new System.Windows.Forms.Label();
             this.textDescricao = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.labelProdutoNaoEncontrado = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericQuantidade)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.labelProdutoNaoEncontrado);
             this.groupBox1.Controls.Add(this.textFabricante);
             this.groupBox1.Controls.Add(this.maskedTextCodigo);
             this.groupBox1.Controls.Add(this.numericQuantidade);
@@ -94,6 +96,7 @@ namespace Estoque {
             this.maskedTextCodigo.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextCodigo_MaskInputRejected);
             this.maskedTextCodigo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             this.maskedTextCodigo.Leave += new System.EventHandler(this.maskedTextCodigo_Leave);
+            this.maskedTextCodigo.GotFocus += new EventHandler(this.maskedTextCodigo_GotFocus);
             // 
             // numericQuantidade
             // 
@@ -235,6 +238,15 @@ namespace Estoque {
             this.label1.TabIndex = 7;
             this.label1.Text = "Código:";
             // 
+            // labelProdutoNaoEncontrado
+            // 
+            this.labelProdutoNaoEncontrado.AutoSize = true;
+            this.labelProdutoNaoEncontrado.ForeColor = System.Drawing.Color.Red;
+            this.labelProdutoNaoEncontrado.Location = new System.Drawing.Point(189, 57);
+            this.labelProdutoNaoEncontrado.Name = "labelProdutoNaoEncontrado";
+            this.labelProdutoNaoEncontrado.Size = new System.Drawing.Size(0, 13);
+            this.labelProdutoNaoEncontrado.TabIndex = 24;
+            // 
             // FrmConsultaProduto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,5 +287,6 @@ namespace Estoque {
         private System.Windows.Forms.TextBox textDescricao;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textFabricante;
+        private System.Windows.Forms.Label labelProdutoNaoEncontrado;
     }
 }
