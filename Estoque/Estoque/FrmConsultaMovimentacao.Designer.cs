@@ -119,7 +119,8 @@
             this.textBoxNrMovimentacao.Location = new System.Drawing.Point(64, 20);
             this.textBoxNrMovimentacao.Name = "textBoxNrMovimentacao";
             this.textBoxNrMovimentacao.Size = new System.Drawing.Size(100, 20);
-            this.textBoxNrMovimentacao.TabIndex = 1;
+            this.textBoxNrMovimentacao.TabIndex = 0;
+            this.textBoxNrMovimentacao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxNrMovimentacao_Enter);
             // 
             // label1
             // 
@@ -135,7 +136,7 @@
             this.buttonConsultar.Location = new System.Drawing.Point(170, 18);
             this.buttonConsultar.Name = "buttonConsultar";
             this.buttonConsultar.Size = new System.Drawing.Size(75, 23);
-            this.buttonConsultar.TabIndex = 3;
+            this.buttonConsultar.TabIndex = 1;
             this.buttonConsultar.Text = "Consultar";
             this.buttonConsultar.UseVisualStyleBackColor = true;
             this.buttonConsultar.Click += new System.EventHandler(this.buttonConsultar_Click);
@@ -230,7 +231,7 @@
             this.buttonImprimir.Location = new System.Drawing.Point(685, 458);
             this.buttonImprimir.Name = "buttonImprimir";
             this.buttonImprimir.Size = new System.Drawing.Size(75, 23);
-            this.buttonImprimir.TabIndex = 16;
+            this.buttonImprimir.TabIndex = 2;
             this.buttonImprimir.Text = "Imprimir";
             this.buttonImprimir.UseVisualStyleBackColor = true;
             this.buttonImprimir.Click += new System.EventHandler(this.buttonImprimir_Click);

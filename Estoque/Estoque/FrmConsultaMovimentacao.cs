@@ -88,6 +88,14 @@ namespace Estoque {
             connection.Close();
         }
 
+        private void textBoxNrMovimentacao_Enter(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                buttonConsultar_Click(sender, e);
+            }
+            
+        }
         private void buttonImprimir_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.PrintDialog PrintDialog2 = new PrintDialog();
