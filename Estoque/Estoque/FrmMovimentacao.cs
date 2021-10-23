@@ -111,17 +111,25 @@ namespace Estoque {
                 {
                     if (dataGridMovimentacao.CurrentCell != null)
                     {
-                        if (long.TryParse(dataGridMovimentacao.CurrentCell.Value?.ToString(), out long codigoProduto))
-                        {
-                            var produto = buscaProduto(codigoProduto);
-                            if(produto != null)
-                                dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
-                            //dataGridMovimentacao.CurrentCell = dataGridMovimentacao[0, 0];
-                        }
-                        else
-                            MessageBox.Show("Código inválido");
+                    if (long.TryParse(dataGridMovimentacao.CurrentCell.Value?.ToString(), out long codigoProduto))
+                    {
+                        var produto = buscaProduto(codigoProduto);
+                        if (produto != null)
+                            dataGridMovimentacao.CurrentRow.SetValues(buscaProduto(codigoProduto));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Código inválido");
+                    }
                     }
                 }
+        }
+
+        private void dataGridMovimentacao_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            // Update the balance column whenever rows are deleted.
+            CalculaQuantidadeTotal();
+            CalculaValorSubTotal();
         }
 
         private object[] buscaProduto(long codigoProduto)
@@ -260,6 +268,12 @@ namespace Estoque {
             if(dataGridMovimentacao[1, 0].Value == null)
             {
                 MessageBox.Show("Adicione pelo menos um item.");
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("Gravar Movimentação?", "Alerta", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No)
+            {
                 return;
             }
 
@@ -506,6 +520,12 @@ namespace Estoque {
             if(!float.TryParse(textBoxPercentual.Text, out float a))
             {
                 MessageBox.Show("Número Inválido!");
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show($"Adicionar {textBoxPercentual.Text}% ?", "Alerta", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No)
+            {
                 return;
             }
 

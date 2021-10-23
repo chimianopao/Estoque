@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Printing;
+using System.Windows.Forms;
 
 namespace Estoque {
     partial class FrmMovimentacao {
@@ -106,6 +107,7 @@ namespace Estoque {
             this.dataGridMovimentacao.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellContentClick);
             this.dataGridMovimentacao.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellValueChanged);
             this.dataGridMovimentacao.ColumnHeaderCellChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.DataGridView1_ColumnHeaderCellChanged);
+            this.dataGridMovimentacao.RowsRemoved += new DataGridViewRowsRemovedEventHandler(this.dataGridMovimentacao_RowsRemoved);
             // 
             // label2
             // 
