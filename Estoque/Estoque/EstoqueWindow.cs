@@ -51,5 +51,12 @@ namespace Estoque {
             consultaMovimentacao.MdiParent = this;
             consultaMovimentacao.Show();
         }
+
+        private void produtosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmRelatorioProdutos relatorioProdutos = new FrmRelatorioProdutos();
+            relatorioProdutos.MdiParent = this;
+            relatorioProdutos.Show();
+        }
     }
 }
