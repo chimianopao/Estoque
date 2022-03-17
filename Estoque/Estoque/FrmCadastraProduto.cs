@@ -243,7 +243,8 @@ namespace Estoque {
         private void lucro_Leave_AplicaLucro(object sender, EventArgs e)
         {
             if(float.TryParse(textPrecoCusto.Text, out float bruto) &&
-                float.TryParse(textMargemLucro.Text, out float margem))
+                float.TryParse(textMargemLucro.Text, out float margem) &&
+                !float.TryParse(textPrecoVenda.Text, out float liquido))
             {
                 textPrecoVenda.Text = (bruto + (bruto * (margem / 100))).ToString("0.00");
             }
