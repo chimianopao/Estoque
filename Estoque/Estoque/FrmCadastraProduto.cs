@@ -261,5 +261,11 @@ namespace Estoque {
                 SendKeys.Send("+{TAB}");
             }
         }
+
+        private void maskedTextCodigo_GotFocus(object sender, EventArgs e)
+        {
+            if (maskedTextCodigo.Text.Length > 0)
+                maskedTextCodigo.SelectAll();
+        }
     }
 }

@@ -89,6 +89,7 @@ namespace Estoque {
             this.maskedTextCodigo.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextCodigo_MaskInputRejected);
             this.maskedTextCodigo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.navigationHandler);
             this.maskedTextCodigo.Leave += new System.EventHandler(this.codigo_Leave_BuscaProduto);
+            this.maskedTextCodigo.GotFocus += new EventHandler(this.maskedTextCodigo_GotFocus);
             // 
             // buttonCadastraFabricante
             // 
