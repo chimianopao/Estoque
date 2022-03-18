@@ -34,6 +34,12 @@ namespace Estoque {
             this.comboBoxVendedores = new System.Windows.Forms.ComboBox();
             this.buttonCadastraVendedor = new System.Windows.Forms.Button();
             this.dataGridMovimentacao = new System.Windows.Forms.DataGridView();
+            this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descricao = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fabricante = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Quantidade = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValorTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.labelQtdTotal = new System.Windows.Forms.Label();
@@ -53,12 +59,8 @@ namespace Estoque {
             this.buttonRestauraValores = new System.Windows.Forms.Button();
             this.textBoxObservacao = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descricao = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fabricante = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Quantidade = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValorTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label7 = new System.Windows.Forms.Label();
+            this.labelPaginas = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridMovimentacao)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,7 +109,45 @@ namespace Estoque {
             this.dataGridMovimentacao.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellContentClick);
             this.dataGridMovimentacao.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridMovimentacao_CellValueChanged);
             this.dataGridMovimentacao.ColumnHeaderCellChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.DataGridView1_ColumnHeaderCellChanged);
-            this.dataGridMovimentacao.RowsRemoved += new DataGridViewRowsRemovedEventHandler(this.dataGridMovimentacao_RowsRemoved);
+            this.dataGridMovimentacao.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridMovimentacao_RowsRemoved);
+            // 
+            // Codigo
+            // 
+            this.Codigo.HeaderText = "Código";
+            this.Codigo.Name = "Codigo";
+            // 
+            // Descricao
+            // 
+            this.Descricao.HeaderText = "Descrição";
+            this.Descricao.Name = "Descricao";
+            this.Descricao.ReadOnly = true;
+            this.Descricao.Width = 280;
+            // 
+            // Fabricante
+            // 
+            this.Fabricante.HeaderText = "Fabricante";
+            this.Fabricante.Name = "Fabricante";
+            this.Fabricante.ReadOnly = true;
+            this.Fabricante.Width = 150;
+            // 
+            // Quantidade
+            // 
+            this.Quantidade.HeaderText = "Qtd";
+            this.Quantidade.Name = "Quantidade";
+            this.Quantidade.Width = 40;
+            // 
+            // Valor
+            // 
+            this.Valor.HeaderText = "Valor Unitário";
+            this.Valor.Name = "Valor";
+            this.Valor.Width = 95;
+            // 
+            // ValorTotal
+            // 
+            this.ValorTotal.HeaderText = "Valor Total";
+            this.ValorTotal.Name = "ValorTotal";
+            this.ValorTotal.ReadOnly = true;
+            this.ValorTotal.Width = 95;
             // 
             // label2
             // 
@@ -269,49 +309,31 @@ namespace Estoque {
             this.label6.TabIndex = 19;
             this.label6.Text = "Obs:";
             // 
-            // Codigo
+            // label7
             // 
-            this.Codigo.HeaderText = "Código";
-            this.Codigo.Name = "Codigo";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(763, 369);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.TabIndex = 20;
+            this.label7.Text = "Páginas:";
             // 
-            // Descricao
+            // labelPaginas
             // 
-            this.Descricao.HeaderText = "Descrição";
-            this.Descricao.Name = "Descricao";
-            this.Descricao.ReadOnly = true;
-            this.Descricao.Width = 280;
-            // 
-            // Fabricante
-            // 
-            this.Fabricante.HeaderText = "Fabricante";
-            this.Fabricante.Name = "Fabricante";
-            this.Fabricante.ReadOnly = true;
-            this.Fabricante.Width = 150;
-            // 
-            // Quantidade
-            // 
-            this.Quantidade.HeaderText = "Qtd";
-            this.Quantidade.Name = "Quantidade";
-            this.Quantidade.Width = 40;
-            // 
-            // Valor
-            // 
-            this.Valor.HeaderText = "Valor Unitário";
-            this.Valor.Name = "Valor";
-            this.Valor.Width = 95;
-            // 
-            // ValorTotal
-            // 
-            this.ValorTotal.HeaderText = "Valor Total";
-            this.ValorTotal.Name = "ValorTotal";
-            this.ValorTotal.ReadOnly = true;
-            this.ValorTotal.Width = 95;
+            this.labelPaginas.AutoSize = true;
+            this.labelPaginas.Location = new System.Drawing.Point(811, 369);
+            this.labelPaginas.Name = "labelPaginas";
+            this.labelPaginas.Size = new System.Drawing.Size(13, 13);
+            this.labelPaginas.TabIndex = 21;
+            this.labelPaginas.Text = "1";
             // 
             // FrmMovimentacao
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 450);
+            this.Controls.Add(this.labelPaginas);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBoxObservacao);
             this.Controls.Add(this.buttonRestauraValores);
@@ -371,5 +393,7 @@ namespace Estoque {
         private System.Windows.Forms.DataGridViewTextBoxColumn Quantidade;
         private System.Windows.Forms.DataGridViewTextBoxColumn Valor;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValorTotal;
+        private Label label7;
+        private Label labelPaginas;
     }
 }

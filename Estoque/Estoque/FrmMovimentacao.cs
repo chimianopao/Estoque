@@ -16,6 +16,7 @@ namespace Estoque {
         string tipoMovimentacao = "SAIDA";
         private int numberOfItemsPerPage = 0;
         private int numberOfItemsPrintedSoFar = 0;
+        private int page = 1;
         private List<string> backupValorUnit = new List<string>();
         public FrmMovimentacao(string tipo)
         {
@@ -187,6 +188,7 @@ namespace Estoque {
             }
 
             labelQtdTotal.Text = qtdTotal.ToString();
+            labelPaginas.Text = ((qtdTotal / 61) + 1).ToString();
         }
 
         private void CalculaValorTotal(int currentRoll = -1)
@@ -407,8 +409,6 @@ namespace Estoque {
 
         private void buttonImprimir_Click(object sender, EventArgs e)
         {
-            //CaptureScreen();
-            //printDocument1.Print();
             System.Windows.Forms.PrintDialog PrintDialog1 = new PrintDialog();
             PrintDialog1.AllowSomePages = true;
             PrintDialog1.ShowHelp = true;
@@ -433,16 +433,11 @@ namespace Estoque {
         private void printDocument1_PrintPage(System.Object sender,
            System.Drawing.Printing.PrintPageEventArgs e)
         {
-            //e.Graphics.DrawImage(memoryImage, 0, 0);
-            //int numberOfItemsPerPage = 0;
-            //int numberOfItemsPrintedSoFar = 0;
-
             e.Graphics.DrawString($"MOVIMENTAÇÃO {labelTipoMovimentacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 10);
             e.Graphics.DrawString($"Número {labelNrMovimentacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 30);
             e.Graphics.DrawString($"Vendedora: {comboBoxVendedores.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 50);
             e.Graphics.DrawString(DateTime.Today.ToShortDateString(), new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 10);
-            
-            
+            e.Graphics.DrawString($"Página: {page}/{(int)(dataGridMovimentacao.Rows.Count / 62) + 1}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 30);
 
             string curdhead = "Monetti";
             e.Graphics.DrawString(curdhead, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 350, 50);
@@ -470,18 +465,18 @@ namespace Estoque {
 
             e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, 115, 900, 115);
 
-            int height = 100;
-            for (int l = numberOfItemsPrintedSoFar; l < dataGridMovimentacao.Rows.Count; l++)
+            int height = 105;
+            for (int l = numberOfItemsPrintedSoFar; l < dataGridMovimentacao.Rows.Count-1; l++)
             {
                 numberOfItemsPerPage = numberOfItemsPerPage + 1;
-                if (numberOfItemsPerPage <= 40)
+                if (numberOfItemsPerPage <= 60)
                 {
                     numberOfItemsPrintedSoFar++;
 
                     if (numberOfItemsPrintedSoFar <= dataGridMovimentacao.Rows.Count)
                     {
 
-                        height += dataGridMovimentacao.Rows[0].Height;
+                        height += (dataGridMovimentacao.Rows[0].Height-6);
                         e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[0].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(30, height, dataGridMovimentacao.Columns[0].Width, dataGridMovimentacao.Rows[0].Height));
                         e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[1].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(130, height, dataGridMovimentacao.Columns[1].Width, dataGridMovimentacao.Rows[0].Height));
                         e.Graphics.DrawString(dataGridMovimentacao.Rows[l].Cells[2].FormattedValue.ToString(), dataGridMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(420, height, dataGridMovimentacao.Columns[2].Width, dataGridMovimentacao.Rows[0].Height));
@@ -499,20 +494,18 @@ namespace Estoque {
                 {
                     numberOfItemsPerPage = 0;
                     e.HasMorePages = true;
+                    page++;
                     return;
-
                 }
-
-
             }
             numberOfItemsPerPage = 0;
             numberOfItemsPrintedSoFar = 0;
-            //e.Graphics.DrawString(l2, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 0, height-5);
-            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, height-5, 900, height-5);
+            page = 1;
+            height = height + 16;
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, height, 900, height);
             e.Graphics.DrawString($"{labelQtdTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 570, height + 5);
             e.Graphics.DrawString($"R$ {labelValorTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 700, height + 5);
         }
-
 
 
         private void buttonAplicaPercentual_Click(object sender, EventArgs e)

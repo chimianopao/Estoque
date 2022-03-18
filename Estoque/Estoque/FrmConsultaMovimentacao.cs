@@ -15,6 +15,7 @@ namespace Estoque {
         string pathSQL = System.IO.Path.Combine(Environment.CurrentDirectory, @"sql\", "estoque.db");
         private int numberOfItemsPerPage = 0;
         private int numberOfItemsPrintedSoFar = 0;
+        private int page = 1;
         public FrmConsultaMovimentacao()
         {
             InitializeComponent();
@@ -48,6 +49,7 @@ namespace Estoque {
                     labelData.Text = DateTime.Parse(Convert.ToString(reader["data_movimentacao"])).ToShortDateString();
                     labelVendedor.Text = Convert.ToString(reader["nome"]);
                     labelTipoMovimentacao.Text = Convert.ToString(reader["tipo"]);
+                    labelPaginas.Text = ((int.Parse(labelQuantidadeTotal.Text) / 61)+1).ToString();
                     encontrou = true;
                     reader.Close();
                 }
@@ -118,6 +120,7 @@ namespace Estoque {
             e.Graphics.DrawString($"Número {textBoxNrMovimentacao.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 30);
             e.Graphics.DrawString($"Vendedora: {labelVendedor.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 30, 50);
             e.Graphics.DrawString(labelData.Text, new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 10);
+            e.Graphics.DrawString($"Página: {page}/{(int)(dataGridViewMovimentacao.Rows.Count / 62) + 1}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 720, 30);
 
 
 
@@ -139,18 +142,18 @@ namespace Estoque {
 
             e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, 115, 900, 115);
 
-            int height = 100;
-            for (int l = numberOfItemsPrintedSoFar; l < dataGridViewMovimentacao.Rows.Count; l++)
+            int height = 105;
+            for (int l = numberOfItemsPrintedSoFar; l < dataGridViewMovimentacao.Rows.Count-1; l++)
             {
                 numberOfItemsPerPage = numberOfItemsPerPage + 1;
-                if (numberOfItemsPerPage <= 45)
+                if (numberOfItemsPerPage <= 60)
                 {
                     numberOfItemsPrintedSoFar++;
 
                     if (numberOfItemsPrintedSoFar <= dataGridViewMovimentacao.Rows.Count)
                     {
 
-                        height += dataGridViewMovimentacao.Rows[0].Height;
+                        height += (dataGridViewMovimentacao.Rows[0].Height-6);
                         e.Graphics.DrawString(dataGridViewMovimentacao.Rows[l].Cells[0].FormattedValue.ToString(), dataGridViewMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(30, height, dataGridViewMovimentacao.Columns[0].Width, dataGridViewMovimentacao.Rows[0].Height));
                         e.Graphics.DrawString(dataGridViewMovimentacao.Rows[l].Cells[1].FormattedValue.ToString(), dataGridViewMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(130, height, dataGridViewMovimentacao.Columns[1].Width, dataGridViewMovimentacao.Rows[0].Height));
                         e.Graphics.DrawString(dataGridViewMovimentacao.Rows[l].Cells[2].FormattedValue.ToString(), dataGridViewMovimentacao.Font = new Font("Book Antiqua", 8), Brushes.Black, new RectangleF(420, height, dataGridViewMovimentacao.Columns[2].Width, dataGridViewMovimentacao.Rows[0].Height));
@@ -168,6 +171,7 @@ namespace Estoque {
                 {
                     numberOfItemsPerPage = 0;
                     e.HasMorePages = true;
+                    page++;
                     return;
 
                 }
@@ -176,7 +180,9 @@ namespace Estoque {
             }
             numberOfItemsPerPage = 0;
             numberOfItemsPrintedSoFar = 0;
-            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, height - 5, 900, height - 5);
+            page = 1;
+            height = height + 16;
+            e.Graphics.DrawLine(new Pen(Color.Black, 2), 0, height, 900, height);
             e.Graphics.DrawString($"{labelQuantidadeTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 570, height + 5);
             e.Graphics.DrawString($"R$ {labelValorTotal.Text}", new System.Drawing.Font("Book Antiqua", 9, FontStyle.Bold), Brushes.Black, 700, height + 5);
         }
