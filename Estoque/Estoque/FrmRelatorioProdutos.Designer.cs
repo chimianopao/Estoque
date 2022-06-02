@@ -30,6 +30,7 @@
             this.comboBoxFabricante = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonTotalPorFabricante = new System.Windows.Forms.Button();
+            this.buttonListaPorFabricante = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonTotalGeral
@@ -72,11 +73,22 @@
             this.buttonTotalPorFabricante.UseVisualStyleBackColor = true;
             this.buttonTotalPorFabricante.Click += new System.EventHandler(this.buttonTotalPorFabricante_Click);
             // 
+            // buttonListaPorFabricante
+            // 
+            this.buttonListaPorFabricante.Location = new System.Drawing.Point(545, 134);
+            this.buttonListaPorFabricante.Name = "buttonListaPorFabricante";
+            this.buttonListaPorFabricante.Size = new System.Drawing.Size(145, 40);
+            this.buttonListaPorFabricante.TabIndex = 15;
+            this.buttonListaPorFabricante.Text = "Listar por fabricante";
+            this.buttonListaPorFabricante.UseVisualStyleBackColor = true;
+            this.buttonListaPorFabricante.Click += new System.EventHandler(this.buttonListaPorFabricante_Click);
+            // 
             // FrmRelatorioProdutos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonListaPorFabricante);
             this.Controls.Add(this.buttonTotalPorFabricante);
             this.Controls.Add(this.comboBoxFabricante);
             this.Controls.Add(this.label3);
@@ -86,6 +98,7 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+            this.printDocument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument_PrintPage);
         }
 
         #endregion
@@ -94,5 +107,7 @@
         private System.Windows.Forms.ComboBox comboBoxFabricante;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonTotalPorFabricante;
+        private System.Windows.Forms.Button buttonListaPorFabricante;
+        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog;
     }
 }
