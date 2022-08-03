@@ -19,6 +19,7 @@ namespace Estoque {
         private int numberOfItemsPrintedSoFar = 0;
         private int page = 1;
         List<Produto> listaProdutos = new List<Produto>();
+        private PrintDocument printDocument = new PrintDocument();
         public FrmRelatorioProdutos()
         {
             InitializeComponent();
@@ -32,8 +33,8 @@ namespace Estoque {
             connection = new SqliteConnection(strConn);
             var quantidadeTotal = 0;
             double valorTotal = 0;
-            try
-            {
+            //try
+            //{
                 connection.Open();
                 SqliteCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "SELECT * FROM PRODUTOS";
@@ -46,6 +47,7 @@ namespace Estoque {
                     var quantidade = int.Parse(Convert.ToString(reader["quantidade"]));
                     if (quantidade > 0)
                     {
+                    var codigo = Convert.ToString(reader["codigo"]);
                         quantidadeTotal += quantidade;
                         valorTotal += quantidade * double.Parse(Convert.ToString(reader["preco_venda"]));
                     }
@@ -53,11 +55,11 @@ namespace Estoque {
 
                 reader.Dispose();
                 cmd.Dispose();
-            }
-            catch (Exception erro)
-            {
-                MessageBox.Show(erro.Message);
-            }
+            //}
+            //catch (Exception erro)
+            //{
+            //    MessageBox.Show(erro.Message);
+            //}
             connection.Close();
 
             MessageBox.Show($"Quantidade total: {quantidadeTotal} \nValor de venda total: R$ {valorTotal.ToString("0.00")}");
@@ -220,7 +222,7 @@ namespace Estoque {
             //MessageBox.Show($"Quantidade total: {quantidadeTotal} \nValor de venda total: R$ {valorTotal.ToString("0.00")}");
         }
 
-        private PrintDocument printDocument = new PrintDocument();
+        
 
         public void imprimirListagem()
         {

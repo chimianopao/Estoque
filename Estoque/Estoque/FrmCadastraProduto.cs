@@ -41,6 +41,28 @@ namespace Estoque {
                 MessageBox.Show("Preço de Venda é um campo obrigatório.");
                 return false;
             }
+
+            bool precoVenda = Double.TryParse(textPrecoVenda.Text, out double resultV);
+            if (precoVenda == false)
+            {
+                MessageBox.Show("Preço de Venda não possui um número válido.");
+                return false;
+            }
+
+            bool precoCusto = Double.TryParse(textPrecoCusto.Text, out double resultC);
+            if (textPrecoCusto.Text != "" && precoCusto == false)
+            {
+                MessageBox.Show("Preço de Custo não possui um número válido.");
+                return false;
+            }
+
+            bool margemLucro = Double.TryParse(textMargemLucro.Text, out double resultM);
+            if (textMargemLucro.Text != "" && margemLucro == false)
+            {
+                MessageBox.Show("Margem de Lucro não possui um número válido.");
+                return false;
+            }
+
             return true;
         }
 
